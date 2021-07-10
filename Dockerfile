@@ -1,16 +1,12 @@
-FROM golang:1.16-alpine AS build
+FROM golang:1.16-alpine
 WORKDIR /app
 COPY . .
 
 # for go binary to run on alpine image 
-ENV CGO_ENABLED=0
-RUN go mod download 
-RUN go build -o /dictionaryapi
+ENV CGO_ENABLED=0 \
+    GIN_MODE=release \
+    PORT=8080
 
-FROM alpine:latest AS deploy
-WORKDIR /
-COPY --from=build /dictionaryapi /
-ENV GIN_MODE=release
-ENV PORT=8080
+RUN go build -o /dictionaryapi
 
 CMD ["/dictionaryapi"]
