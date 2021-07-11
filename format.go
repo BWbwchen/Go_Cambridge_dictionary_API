@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 )
+
+var maxMeaningLine int = 5
 
 type meaningAndSentence struct {
 	Meaning  string   `json:"meaning"`
@@ -19,9 +22,31 @@ func formatCrawlerResult(result string) string {
 	space := regexp.MustCompile(`\s+`)
 	removeSpace := space.ReplaceAllString(result, " ")
 	// remove case of [ C ] or [ T ]
-	corT := regexp.MustCompile(`\[\s+.\s+\]`)
+	corT := regexp.MustCompile(`\[\s+.\s+\]|:`)
 	removeCorT := corT.ReplaceAllString(removeSpace, "")
 	// remove leading space
-	s := strings.TrimSpace(removeCorT)
+	noSpaceDuplicate := strings.TrimSpace(removeCorT)
+	// replace the needed escape character
+	// escape := regexp.MustCompile(`\.|\'|\*|\[|\]|\(|\)|\~|\>|\#|\+|\-|\=|\||\{|\}|\.|\!`)
+	// removeEscape := escape.ReplaceAllString(noSpaceDuplicate, `\$0`)
+
+	s := noSpaceDuplicate
 	return s
+}
+
+func PreprocessingJSONToString(preOutput wordMeaning) string {
+	output := ""
+	// title
+	output += fmt.Sprintf("*%s*\n", preOutput.WordToSearch)
+	for i, result := range preOutput.ResultList {
+		if i+1 > maxMeaningLine {
+			break
+		}
+		output += fmt.Sprintf("%d", i+1) + ". *" + result.Meaning + "*\n"
+		if len(result.Sentence) > 0 {
+			output += `\* _` + result.Sentence[0] + "_\n"
+		}
+	}
+
+	return output
 }

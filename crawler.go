@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/gocolly/colly"
 )
 
@@ -14,11 +12,7 @@ func init() {
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
 		colly.AllowedDomains("dictionary.cambridge.org"),
 	)
-	// Before making a request print "Visiting ..."
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting", r.URL.String())
-	})
-
+	c.AllowURLRevisit = true
 	settingSearch()
 }
 
