@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-var TOKEN string = "YOUR-TOKEN"
+var TOKEN string = "YOUR-TELEGRAM-TOKEN"
 
 type Update struct {
 	UpdateId int     `json:"update_id"`

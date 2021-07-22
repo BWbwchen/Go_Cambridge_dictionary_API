@@ -15,6 +15,8 @@ type meaningAndSentence struct {
 
 type wordMeaning struct {
 	WordToSearch string               `json:"word"`
+	KK           string               `json:"kk"`
+	POS          string               `json:"pos"`
 	ResultList   []meaningAndSentence `json:"result"`
 }
 
@@ -37,7 +39,9 @@ func formatCrawlerResult(result string) string {
 func PreprocessingJSONToString(preOutput wordMeaning) string {
 	output := ""
 	// title
-	output += fmt.Sprintf("*%s*\n", preOutput.WordToSearch)
+	output += fmt.Sprintf(`*%s*  (_%s_)`, preOutput.WordToSearch, preOutput.POS) + "\n"
+	output += preOutput.KK + "\n"
+
 	for i, result := range preOutput.ResultList {
 		if i+1 > maxMeaningLine {
 			break

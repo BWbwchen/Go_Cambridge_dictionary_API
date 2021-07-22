@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: telegram-bot
+    namespace: default
+spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 3
+    selector:
+        matchLabels:
+            workload.user.cattle.io/workloadselector: deployment-default-telegram-bot
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+            labels:
+                app: telegram-bot
+            annotations:
+                deploy-date: "deploy-date-value"
