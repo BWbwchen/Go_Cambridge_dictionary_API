@@ -5,10 +5,11 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 )
 
-var TOKEN string = "YOUR-TELEGRAM-TOKEN"
+var TOKEN string = os.Getenv("TOKEN")
 
 type Update struct {
 	UpdateId int     `json:"update_id"`
